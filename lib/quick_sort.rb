@@ -4,6 +4,10 @@ class QuickSort
 
   # Not in-place. Uses O(n) memory.
   def self.sort1(array)
+    mid = array[array.length / 2]
+    left = sort1(array.select { |e| mid > e })
+    right = sort1(array.select { |e| mid < e })
+    left + [mid] + right
   end
 
   # In-place.
@@ -11,5 +15,22 @@ class QuickSort
   end
 
   def self.partition(array, start, length, &prc)
+    prc ||= proc { |el1, el2| el1 <=> el2 }
+    # pivot_idx = start + rand(length)
+    # array[start], array[pivot_idx] = array[pivot_idx], array[start]
+
+    pivot = array[start]
+
+    delim = start + 1
+    idx = delim
+    while idx < start + length
+      if prc.call(pivot, array[idx]) >= 0
+        array[delim], array[idx] = array[idx], array[delim]
+        delim += 1
+      end
+      idx += 1
+    end
+    array[start], array[delim - 1] = array[delim - 1], array[start]
+    pivot_idx = start + length / 2
   end
 end
