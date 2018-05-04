@@ -12,6 +12,16 @@ class QuickSort
 
   # In-place.
   def self.sort2!(array, start = 0, length = array.length, &prc)
+    return array if length < 2
+
+    mid = partition(array, start, length, &prc)
+    left = mid - start
+    right = length - left - 1
+
+    sort2!(array, start, left, &prc)
+    sort2!(array, mid + 1, right, &prc)
+
+    array
   end
 
   def self.partition(array, start, length, &prc)
@@ -31,6 +41,6 @@ class QuickSort
       idx += 1
     end
     array[start], array[delim - 1] = array[delim - 1], array[start]
-    pivot_idx = start + length / 2
+    pivot_idx = delim - 1
   end
 end
